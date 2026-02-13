@@ -1,0 +1,886 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CLASSE+ — Le système d'exploitation scolaire du Québec</title>
+  <meta name="description" content="CLASSE+ remplace les outils fragmentés par une plateforme unique, bilingue et en temps réel pour les écoles primaires du Québec." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Sans:ital,wght@0,400..700;1,400..700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ink: #0f1729;
+      --ink-light: #3a4463;
+      --ink-muted: #6b7394;
+      --surface: #fafbfe;
+      --surface-warm: #f4f1ec;
+      --white: #ffffff;
+      --accent: #3b5bdb;
+      --accent-deep: #2b44a8;
+      --accent-glow: #5c7cfa;
+      --accent-bg: #edf2ff;
+      --green: #099268;
+      --green-bg: #e6fcf5;
+      --amber: #e67700;
+      --amber-bg: #fff9db;
+      --red: #c92a2a;
+      --red-bg: #ffe3e3;
+      --radius: 16px;
+      --radius-sm: 10px;
+      --font-display: 'DM Serif Display', Georgia, serif;
+      --font-body: 'Instrument Sans', -apple-system, sans-serif;
+    }
+
+    html { scroll-behavior: smooth; font-size: 16px; }
+
+    body {
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--surface);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 1rem 2rem;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: background .3s, backdrop-filter .3s, box-shadow .3s;
+    }
+    nav.scrolled {
+      background: rgba(250, 251, 254, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.5rem;
+      color: var(--ink);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+    }
+    .nav-logo span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 2rem; }
+    .nav-links a {
+      color: var(--ink-light);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color .2s;
+    }
+    .nav-links a:hover { color: var(--accent); }
+    .nav-cta {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.6rem 1.4rem;
+      background: var(--ink);
+      color: var(--white) !important;
+      border-radius: 100px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: background .2s, transform .15s;
+    }
+    .nav-cta:hover { background: var(--accent-deep); transform: translateY(-1px); }
+
+    .lang-toggle {
+      display: inline-flex;
+      background: var(--accent-bg);
+      border-radius: 100px;
+      overflow: hidden;
+      border: 1px solid rgba(59, 91, 219, 0.15);
+    }
+    .lang-toggle button {
+      padding: 0.35rem 0.75rem;
+      border: none;
+      background: transparent;
+      font-family: var(--font-body);
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: var(--ink-muted);
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .lang-toggle button.active {
+      background: var(--accent);
+      color: white;
+      border-radius: 100px;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column;
+      justify-content: center; align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .hero::before {
+      content: '';
+      position: absolute; top: -40%; left: -20%; right: -20%; bottom: -20%;
+      background:
+        radial-gradient(ellipse 60% 50% at 30% 20%, rgba(59, 91, 219, 0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 75% 60%, rgba(9, 146, 104, 0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 40% at 50% 100%, rgba(230, 119, 0, 0.04) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 0.45rem 1rem;
+      background: var(--accent-bg);
+      border: 1px solid rgba(59, 91, 219, 0.15);
+      border-radius: 100px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-bottom: 2rem;
+      position: relative;
+      animation: fadeUp 0.8s ease both;
+    }
+    .hero-badge::before {
+      content: '';
+      width: 6px; height: 6px;
+      background: var(--green);
+      border-radius: 50%;
+      animation: pulse-dot 2s infinite;
+    }
+    .hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(2.8rem, 6.5vw, 5.5rem);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+      color: var(--ink);
+      max-width: 900px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      animation: fadeUp 0.8s ease 0.1s both;
+    }
+    .hero h1 em {
+      font-style: italic;
+      color: var(--accent);
+      position: relative;
+    }
+    .hero h1 em::after {
+      content: '';
+      position: absolute;
+      bottom: 0.08em; left: -0.02em; right: -0.02em;
+      height: 0.12em;
+      background: rgba(59, 91, 219, 0.2);
+      border-radius: 4px;
+    }
+    .hero-sub {
+      font-size: clamp(1.05rem, 2vw, 1.3rem);
+      color: var(--ink-muted);
+      max-width: 620px;
+      line-height: 1.65;
+      margin-bottom: 2.5rem;
+      position: relative;
+      animation: fadeUp 0.8s ease 0.2s both;
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; justify-content: center;
+      position: relative;
+      animation: fadeUp 0.8s ease 0.3s both;
+    }
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: var(--accent);
+      color: white;
+      border: none; border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer;
+      transition: all .25s;
+      text-decoration: none;
+      box-shadow: 0 4px 24px rgba(59, 91, 219, 0.3);
+    }
+    .btn-primary:hover {
+      background: var(--accent-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(59, 91, 219, 0.35);
+    }
+    .btn-secondary {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: transparent;
+      color: var(--ink);
+      border: 1.5px solid rgba(15, 23, 41, 0.15);
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 1rem; font-weight: 600;
+      cursor: pointer;
+      transition: all .25s;
+      text-decoration: none;
+    }
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    /* ─── SCROLL INDICATOR ─── */
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+      animation: fadeUp 0.8s ease 0.6s both;
+    }
+    .scroll-hint span { font-size: 0.72rem; color: var(--ink-muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .scroll-line {
+      width: 1px; height: 40px; background: linear-gradient(to bottom, var(--ink-muted), transparent);
+      animation: scrollBounce 2s ease infinite;
+    }
+
+    /* ─── LOGOS / TRUST ─── */
+    .trust-bar {
+      padding: 4rem 2rem;
+      text-align: center;
+      border-top: 1px solid rgba(0,0,0,0.04);
+    }
+    .trust-bar p {
+      font-size: 0.8rem;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-weight: 600;
+      margin-bottom: 2rem;
+    }
+    .trust-logos {
+      display: flex; justify-content: center; align-items: center;
+      gap: 3rem; flex-wrap: wrap;
+      opacity: 0.45;
+    }
+    .trust-logos span {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      color: var(--ink);
+      white-space: nowrap;
+    }
+
+    /* ─── SECTION SHARED ─── */
+    section { padding: 6rem 2rem; }
+    .section-label {
+      display: inline-flex; align-items: center; gap: 0.5rem;
+      font-size: 0.78rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .section-label::before {
+      content: '';
+      width: 24px; height: 2px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3.2rem);
+      line-height: 1.15;
+      letter-spacing: -0.025em;
+      color: var(--ink);
+      max-width: 700px;
+      margin-bottom: 1.2rem;
+    }
+    .section-desc {
+      font-size: 1.1rem;
+      color: var(--ink-muted);
+      max-width: 560px;
+      line-height: 1.65;
+      margin-bottom: 3.5rem;
+    }
+
+    /* ─── PROBLEM SECTION ─── */
+    .problem { background: var(--ink); color: white; position: relative; overflow: hidden; }
+    .problem::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(circle at 80% 20%, rgba(59, 91, 219, 0.15) 0%, transparent 50%);
+    }
+    .problem .section-label { color: var(--accent-glow); }
+    .problem .section-label::before { background: var(--accent-glow); }
+    .problem .section-title { color: white; }
+    .problem .section-desc { color: rgba(255,255,255,0.6); }
+    .problem-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      max-width: 1100px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .problem-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      transition: transform .3s, border-color .3s;
+    }
+    .problem-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(255,255,255,0.15);
+    }
+    .problem-card .icon {
+      width: 48px; height: 48px;
+      background: rgba(255,255,255,0.08);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .problem-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin-bottom: 0.6rem;
+    }
+    .problem-card p {
+      font-size: 0.92rem;
+      color: rgba(255,255,255,0.55);
+      line-height: 1.6;
+    }
+
+    /* ─── FEATURES ─── */
+    .features { max-width: 1200px; margin: 0 auto; }
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+    .feature-card {
+      background: var(--white);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius);
+      padding: 2.2rem;
+      transition: transform .3s, box-shadow .3s;
+      position: relative;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .feature-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.06); }
+    .feature-card:hover::before { opacity: 1; }
+    .feature-card:nth-child(1)::before { background: var(--accent); }
+    .feature-card:nth-child(2)::before { background: var(--green); }
+    .feature-card:nth-child(3)::before { background: var(--amber); }
+    .feature-card:nth-child(4)::before { background: var(--red); }
+    .feature-card:nth-child(5)::before { background: #7048e8; }
+    .feature-card:nth-child(6)::before { background: #0c8599; }
+    .feature-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem;
+      margin-bottom: 1.2rem;
+    }
+    .feature-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+    .feature-card p {
+      font-size: 0.9rem;
+      color: var(--ink-muted);
+      line-height: 1.6;
+    }
+
+    /* ─── ROLES SECTION ─── */
+    .roles { background: var(--surface-warm); }
+    .roles-wrapper { max-width: 1100px; margin: 0 auto; }
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1.5rem;
+    }
+    .role-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 2rem;
+      border: 1px solid rgba(0,0,0,0.05);
+      text-align: center;
+      transition: transform .3s, box-shadow .3s;
+    }
+    .role-card:hover { transform: translateY(-4px); box-shadow: 0 12px 36px rgba(0,0,0,0.06); }
+    .role-emoji {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+    .role-card h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin-bottom: 0.5rem;
+    }
+    .role-card p {
+      font-size: 0.88rem;
+      color: var(--ink-muted);
+      line-height: 1.55;
+    }
+
+    /* ─── STATS ─── */
+    .stats {
+      background: var(--accent);
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .stats::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(circle at 20% 80%, rgba(255,255,255,0.08) 0%, transparent 40%),
+        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 40%);
+    }
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+      max-width: 900px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .stat-item h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2.5rem, 5vw, 3.5rem);
+      line-height: 1;
+      margin-bottom: 0.4rem;
+    }
+    .stat-item p {
+      font-size: 0.88rem;
+      opacity: 0.75;
+      font-weight: 500;
+    }
+
+    /* ─── PIPELINE ─── */
+    .pipeline { max-width: 900px; margin: 0 auto; }
+    .pipeline-steps {
+      display: flex;
+      gap: 0;
+      position: relative;
+    }
+    .pipeline-steps::before {
+      content: '';
+      position: absolute;
+      top: 36px; left: 60px; right: 60px;
+      height: 2px;
+      background: linear-gradient(to right, var(--accent-bg), var(--accent), var(--green));
+    }
+    .pipeline-step {
+      flex: 1;
+      text-align: center;
+      position: relative;
+    }
+    .pipeline-dot {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.8rem;
+      margin: 0 auto 1.2rem;
+      position: relative;
+      z-index: 1;
+    }
+    .pipeline-step h3 {
+      font-family: var(--font-display);
+      font-size: 1.05rem;
+      margin-bottom: 0.4rem;
+    }
+    .pipeline-step p {
+      font-size: 0.85rem;
+      color: var(--ink-muted);
+      line-height: 1.5;
+      max-width: 200px;
+      margin: 0 auto;
+    }
+
+    /* ─── CTA ─── */
+    .cta-section {
+      text-align: center;
+      padding: 8rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .cta-section::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 60% 60% at 50% 80%, rgba(59, 91, 219, 0.06) 0%, transparent 70%);
+    }
+    .cta-section .section-title {
+      max-width: 600px;
+      margin: 0 auto 1rem;
+    }
+    .cta-section .section-desc {
+      max-width: 480px;
+      margin: 0 auto 2.5rem;
+    }
+
+    /* ─── FOOTER ─── */
+    footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.5);
+      padding: 3rem 2rem;
+    }
+    .footer-inner {
+      max-width: 1100px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1.5rem;
+    }
+    .footer-logo {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      color: white;
+    }
+    .footer-logo span { color: var(--accent-glow); }
+    footer a {
+      color: rgba(255,255,255,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color .2s;
+    }
+    footer a:hover { color: white; }
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-legal { font-size: 0.78rem; }
+    .footer-legal a { font-size: 0.78rem; }
+    .quebec-flag { display: inline-block; margin-left: 0.4rem; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.5); }
+    }
+    @keyframes scrollBounce {
+      0%, 100% { transform: scaleY(1); opacity: 0.6; }
+      50% { transform: scaleY(0.6); opacity: 0.3; }
+    }
+
+    /* Scroll reveal */
+    .reveal {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
+    }
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 768px) {
+      nav { padding: 0.8rem 1.2rem; }
+      .nav-links a:not(.nav-cta):not(.lang-toggle) { display: none; }
+      .feature-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+      .pipeline-steps { flex-direction: column; gap: 2rem; }
+      .pipeline-steps::before { display: none; }
+      .role-grid { grid-template-columns: 1fr 1fr; }
+      section { padding: 4rem 1.5rem; }
+      .hero { padding: 6rem 1.5rem 3rem; }
+    }
+
+    @media (max-width: 480px) {
+      .role-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav id="nav">
+    <a href="#" class="nav-logo">CLASSE<span>+</span></a>
+    <div class="nav-links">
+      <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
+      <a href="#roles" data-fr="Portails" data-en="Portals">Portails</a>
+      <a href="#pipeline" data-fr="Vision" data-en="Vision">Vision</a>
+      <div class="lang-toggle">
+        <button id="btn-fr" class="active" onclick="setLang('fr')">FR</button>
+        <button id="btn-en" onclick="setLang('en')">EN</button>
+      </div>
+      <a href="#contact" class="nav-cta" data-fr="Nous contacter" data-en="Contact Us">Nous contacter</a>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-badge">
+      <span data-fr="Conçu au Québec pour le Québec" data-en="Built in Québec, for Québec">Conçu au Québec pour le Québec</span>
+    </div>
+    <h1>
+      <span data-fr="L'école primaire," data-en="Primary school,">L'école primaire,</span><br/>
+      <em data-fr="réinventée." data-en="reimagined.">réinventée.</em>
+    </h1>
+    <p class="hero-sub" data-fr="CLASSE+ remplace Mozaïk, Google Classroom, les courriels et les fichiers Excel par une seule plateforme bilingue en temps réel — conforme à la Loi 25, hébergée à Montréal." data-en="CLASSE+ replaces Mozaïk, Google Classroom, emails, and Excel files with a single bilingual, real-time platform — Loi 25 compliant, hosted in Montréal.">
+      CLASSE+ remplace Mozaïk, Google Classroom, les courriels et les fichiers Excel par une seule plateforme bilingue en temps réel — conforme à la Loi 25, hébergée à Montréal.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">
+        <span data-fr="Demander une démo" data-en="Request a Demo">Demander une démo</span>
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9h8m-3-3 3 3-3 3"/></svg>
+      </a>
+      <a href="#features" class="btn-secondary">
+        <span data-fr="Découvrir" data-en="Learn More">Découvrir</span>
+      </a>
+    </div>
+    <div class="scroll-hint">
+      <span data-fr="Défiler" data-en="Scroll">Défiler</span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- TRUST BAR -->
+  <div class="trust-bar reveal">
+    <p data-fr="Pensé pour les commissions scolaires du Québec" data-en="Designed for Québec school boards">Pensé pour les commissions scolaires du Québec</p>
+    <div class="trust-logos">
+      <span>CSSDM</span>
+      <span>PFEQ</span>
+      <span>Loi 25</span>
+      <span>Montréal</span>
+      <span>CAHIER+</span>
+    </div>
+  </div>
+
+  <!-- PROBLEM -->
+  <section class="problem" id="problem">
+    <div style="max-width: 1100px; margin: 0 auto;">
+      <div class="section-label" data-fr="Le problème" data-en="The Problem">Le problème</div>
+      <h2 class="section-title" data-fr="Les écoles utilisent trop d'outils qui ne communiquent pas entre eux." data-en="Schools use too many tools that don't talk to each other.">Les écoles utilisent trop d'outils qui ne communiquent pas entre eux.</h2>
+      <p class="section-desc" data-fr="En moyenne, une école primaire jongle avec 5 à 8 logiciels différents. Résultat : du temps perdu, des données perdues et des enseignants frustrés." data-en="On average, a primary school juggles 5 to 8 different software tools. Result: wasted time, lost data, and frustrated teachers.">En moyenne, une école primaire jongle avec 5 à 8 logiciels différents. Résultat : du temps perdu, des données perdues et des enseignants frustrés.</p>
+      <div class="problem-grid">
+        <div class="problem-card reveal">
+          <div class="icon">📋</div>
+          <h3 data-fr="Présences manuelles" data-en="Manual Attendance">Présences manuelles</h3>
+          <p data-fr="Feuilles papier, double saisie, aucune alerte automatique aux parents." data-en="Paper sheets, double entry, no automatic alerts to parents.">Feuilles papier, double saisie, aucune alerte automatique aux parents.</p>
+        </div>
+        <div class="problem-card reveal">
+          <div class="icon">📚</div>
+          <h3 data-fr="Bulletins fragmentés" data-en="Fragmented Report Cards">Bulletins fragmentés</h3>
+          <p data-fr="Excel + Mozaïk + courriels. Les compétences PFEQ saisies à la main, chaque fois." data-en="Excel + Mozaïk + emails. PFEQ competencies entered manually, every time.">Excel + Mozaïk + courriels. Les compétences PFEQ saisies à la main, chaque fois.</p>
+        </div>
+        <div class="problem-card reveal">
+          <div class="icon">🔄</div>
+          <h3 data-fr="Suppléance chaotique" data-en="Chaotic Substitution">Suppléance chaotique</h3>
+          <p data-fr="Appels téléphoniques à 6h du matin. Aucun suivi. Le suppléant arrive sans plan de cours." data-en="Phone calls at 6 AM. No tracking. The sub arrives with no lesson plan.">Appels téléphoniques à 6h du matin. Aucun suivi. Le suppléant arrive sans plan de cours.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section id="features">
+    <div class="features">
+      <div class="section-label reveal" data-fr="La solution" data-en="The Solution">La solution</div>
+      <h2 class="section-title reveal" data-fr="Un seul outil. Toute l'école." data-en="One tool. The whole school.">Un seul outil. Toute l'école.</h2>
+      <p class="section-desc reveal" data-fr="CLASSE+ connecte tout le monde en temps réel : enseignants, élèves, parents, direction et commission scolaire." data-en="CLASSE+ connects everyone in real time: teachers, students, parents, administration, and the school board.">CLASSE+ connecte tout le monde en temps réel : enseignants, élèves, parents, direction et commission scolaire.</p>
+      <div class="feature-grid">
+        <div class="feature-card reveal">
+          <div class="feature-icon" style="background: var(--accent-bg); color: var(--accent);">⚡</div>
+          <h3 data-fr="Sessions en direct" data-en="Live Sessions">Sessions en direct</h3>
+          <p data-fr="Code à 4 chiffres. Les élèves reçoivent le matériel sur iPad en moins de 2 secondes. Mode attention intégré." data-en="4-digit code. Students receive materials on iPads in under 2 seconds. Built-in attention mode.">Code à 4 chiffres. Les élèves reçoivent le matériel sur iPad en moins de 2 secondes. Mode attention intégré.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon" style="background: var(--green-bg); color: var(--green);">🤖</div>
+          <h3 data-fr="Quiz IA" data-en="AI Quizzes">Quiz IA</h3>
+          <p data-fr="L'IA génère les questions, corrige automatiquement et identifie les lacunes — aligné au PFEQ." data-en="AI generates questions, auto-grades, and identifies gaps — aligned to PFEQ curriculum.">L'IA génère les questions, corrige automatiquement et identifie les lacunes — aligné au PFEQ.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon" style="background: var(--amber-bg); color: var(--amber);">📊</div>
+          <h3 data-fr="Bulletins PFEQ" data-en="PFEQ Report Cards">Bulletins PFEQ</h3>
+          <p data-fr="Format officiel du ministère. Compétences, pondérations par cycle, commentaires — prêt à imprimer." data-en="Official ministry format. Competencies, cycle weightings, comments — print-ready.">Format officiel du ministère. Compétences, pondérations par cycle, commentaires — prêt à imprimer.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon" style="background: var(--red-bg); color: var(--red);">🚨</div>
+          <h3 data-fr="Prof Volant" data-en="Prof Volant">Prof Volant</h3>
+          <p data-fr="Système de suppléance automatisé. L'enseignant signale son absence, un suppléant qualifié accepte la mission en un clic." data-en="Automated substitute system. Teacher reports absence, a qualified sub accepts the mission in one click.">Système de suppléance automatisé. L'enseignant signale son absence, un suppléant qualifié accepte la mission en un clic.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon" style="background: #f3f0ff; color: #7048e8;">👨‍👩‍👧</div>
+          <h3 data-fr="Portail parents" data-en="Parent Portal">Portail parents</h3>
+          <p data-fr="Assistant IA en 40+ langues. Notes, présences, bulletins — les parents voient tout, en temps réel." data-en="AI assistant in 40+ languages. Grades, attendance, report cards — parents see everything, in real time.">Assistant IA en 40+ langues. Notes, présences, bulletins — les parents voient tout, en temps réel.</p>
+        </div>
+        <div class="feature-card reveal">
+          <div class="feature-icon" style="background: #e3fafc; color: #0c8599;">🔒</div>
+          <h3 data-fr="Loi 25 · Montréal" data-en="Loi 25 · Montréal">Loi 25 · Montréal</h3>
+          <p data-fr="Toutes les données restent au Canada. Hébergement Montréal. Conforme à la Loi 25 sur la vie privée." data-en="All data stays in Canada. Montréal hosting. Compliant with Loi 25 privacy law.">Toutes les données restent au Canada. Hébergement Montréal. Conforme à la Loi 25 sur la vie privée.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ROLES -->
+  <section class="roles" id="roles">
+    <div class="roles-wrapper">
+      <div class="section-label reveal" data-fr="6 portails, 1 plateforme" data-en="6 portals, 1 platform">6 portails, 1 plateforme</div>
+      <h2 class="section-title reveal" data-fr="Chaque personne a son tableau de bord." data-en="Everyone gets their own dashboard.">Chaque personne a son tableau de bord.</h2>
+      <p class="section-desc reveal" data-fr="Du conseil scolaire jusqu'à l'élève sur son iPad — tout est connecté." data-en="From the school board to the student on their iPad — everything is connected.">Du conseil scolaire jusqu'à l'élève sur son iPad — tout est connecté.</p>
+      <div class="role-grid">
+        <div class="role-card reveal">
+          <span class="role-emoji">🏛️</span>
+          <h3 data-fr="Commission scolaire" data-en="School Board">Commission scolaire</h3>
+          <p data-fr="160 écoles en un coup d'œil. Alertes, présences, effectifs, suppléance et analytique — en temps réel." data-en="160 schools at a glance. Alerts, attendance, enrollment, substitution, and analytics — in real time.">160 écoles en un coup d'œil. Alertes, présences, effectifs, suppléance et analytique — en temps réel.</p>
+        </div>
+        <div class="role-card reveal">
+          <span class="role-emoji">🏫</span>
+          <h3 data-fr="Direction" data-en="Administration">Direction</h3>
+          <p data-fr="Pouls quotidien, rapports de présences, profils d'élèves, système d'alerte précoce." data-en="Daily pulse, attendance reports, student profiles, early warning system.">Pouls quotidien, rapports de présences, profils d'élèves, système d'alerte précoce.</p>
+        </div>
+        <div class="role-card reveal">
+          <span class="role-emoji">👩‍🏫</span>
+          <h3 data-fr="Enseignant" data-en="Teacher">Enseignant</h3>
+          <p data-fr="Sessions en direct, quiz IA, plan de cours, projets, bulletin PFEQ. Tout en un." data-en="Live sessions, AI quizzes, lesson plans, projects, PFEQ report card. All in one.">Sessions en direct, quiz IA, plan de cours, projets, bulletin PFEQ. Tout en un.</p>
+        </div>
+        <div class="role-card reveal">
+          <span class="role-emoji">🎒</span>
+          <h3 data-fr="Élève" data-en="Student">Élève</h3>
+          <p data-fr="iPad optimisé. Rejoint les sessions, reçoit le matériel, fait les quiz et a un tuteur IA personnel." data-en="iPad-optimized. Joins sessions, receives materials, takes quizzes, and has a personal AI tutor.">iPad optimisé. Rejoint les sessions, reçoit le matériel, fait les quiz et a un tuteur IA personnel.</p>
+        </div>
+        <div class="role-card reveal">
+          <span class="role-emoji">👨‍👩‍👧</span>
+          <h3 data-fr="Parent" data-en="Parent">Parent</h3>
+          <p data-fr="Suivi en temps réel. Assistant IA multilingue. Notes, présences et bulletins accessibles en tout temps." data-en="Real-time tracking. Multilingual AI assistant. Grades, attendance, and report cards always accessible.">Suivi en temps réel. Assistant IA multilingue. Notes, présences et bulletins accessibles en tout temps.</p>
+        </div>
+        <div class="role-card reveal">
+          <span class="role-emoji">✈️</span>
+          <h3 data-fr="Suppléant" data-en="Substitute">Suppléant</h3>
+          <p data-fr="Accepte les missions en un clic. Plan de cours intégré, quiz de l'enseignant, sessions en direct." data-en="Accepts missions in one click. Integrated lesson plan, teacher's quizzes, live sessions.">Accepte les missions en un clic. Plan de cours intégré, quiz de l'enseignant, sessions en direct.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="stats reveal">
+    <div class="stats-grid">
+      <div class="stat-item">
+        <h2>160</h2>
+        <p data-fr="Écoles CSSDM" data-en="CSSDM Schools">Écoles CSSDM</p>
+      </div>
+      <div class="stat-item">
+        <h2>6</h2>
+        <p data-fr="Portails intégrés" data-en="Integrated Portals">Portails intégrés</p>
+      </div>
+      <div class="stat-item">
+        <h2>&lt;2s</h2>
+        <p data-fr="Livraison en temps réel" data-en="Real-time Delivery">Livraison en temps réel</p>
+      </div>
+      <div class="stat-item">
+        <h2>FR/EN</h2>
+        <p data-fr="Entièrement bilingue" data-en="Fully Bilingual">Entièrement bilingue</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- PIPELINE -->
+  <section id="pipeline">
+    <div class="pipeline">
+      <div class="section-label reveal" data-fr="Notre vision" data-en="Our Vision">Notre vision</div>
+      <h2 class="section-title reveal" data-fr="Le suppléant d'aujourd'hui est l'enseignant de demain." data-en="Today's substitute is tomorrow's teacher.">Le suppléant d'aujourd'hui est l'enseignant de demain.</h2>
+      <p class="section-desc reveal" data-fr="~3 000 diplômés en éducation au Québec chaque année. S'ils apprennent CLASSE+ comme stagiaires, chaque nouvel enseignant arrive déjà formé." data-en="~3,000 education graduates in Québec each year. If they learn CLASSE+ as student teachers, every new hire arrives pre-trained.">~3 000 diplômés en éducation au Québec chaque année. S'ils apprennent CLASSE+ comme stagiaires, chaque nouvel enseignant arrive déjà formé.</p>
+      <div class="pipeline-steps reveal">
+        <div class="pipeline-step">
+          <div class="pipeline-dot" style="background: var(--accent-bg); color: var(--accent);">🎓</div>
+          <h3 data-fr="Stagiaire" data-en="Student Teacher">Stagiaire</h3>
+          <p data-fr="Dernière année de bac en éducation. S'inscrit comme Prof Volant." data-en="Final year of B.Ed. Registers as Prof Volant.">Dernière année de bac en éducation. S'inscrit comme Prof Volant.</p>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-dot" style="background: var(--amber-bg); color: var(--amber);">✈️</div>
+          <h3 data-fr="Suppléant" data-en="Substitute">Suppléant</h3>
+          <p data-fr="Accepte des missions. Utilise la plateforme en conditions réelles." data-en="Accepts missions. Uses the platform in real conditions.">Accepte des missions. Utilise la plateforme en conditions réelles.</p>
+        </div>
+        <div class="pipeline-step">
+          <div class="pipeline-dot" style="background: var(--green-bg); color: var(--green);">👩‍🏫</div>
+          <h3 data-fr="Enseignant" data-en="Teacher">Enseignant</h3>
+          <p data-fr="Embauché par la commission. Compte promu en un clic. Zéro formation nécessaire." data-en="Hired by the board. Account upgraded in one click. Zero training needed.">Embauché par la commission. Compte promu en un clic. Zéro formation nécessaire.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="section-label reveal" data-fr="Passez à l'action" data-en="Take Action">Passez à l'action</div>
+    <h2 class="section-title reveal" data-fr="Prêt à simplifier votre école ?" data-en="Ready to simplify your school?">Prêt à simplifier votre école ?</h2>
+    <p class="section-desc reveal" data-fr="Demandez une démonstration gratuite. Nous pouvons déployer dans votre commission scolaire en quelques semaines." data-en="Request a free demo. We can deploy to your school board in a few weeks.">Demandez une démonstration gratuite. Nous pouvons déployer dans votre commission scolaire en quelques semaines.</p>
+    <div class="hero-actions reveal" style="justify-content: center;">
+      <a href="mailto:info@classeplus.ca" class="btn-primary">
+        <span data-fr="Demander une démo" data-en="Request a Demo">Demander une démo</span>
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9h8m-3-3 3 3-3 3"/></svg>
+      </a>
+      <a href="mailto:info@classeplus.ca" class="btn-secondary">
+        <span>info@classeplus.ca</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">CLASSE<span>+</span></div>
+        <p class="footer-legal" style="margin-top: 0.5rem;">
+          <span data-fr="Données hébergées à Montréal" data-en="Data hosted in Montréal">Données hébergées à Montréal</span>
+          <span class="quebec-flag">🏳️</span>
+          · <span data-fr="Conforme Loi 25" data-en="Loi 25 Compliant">Conforme Loi 25</span>
+        </p>
+      </div>
+      <div class="footer-links">
+        <a href="#features" data-fr="Fonctionnalités" data-en="Features">Fonctionnalités</a>
+        <a href="#roles" data-fr="Portails" data-en="Portals">Portails</a>
+        <a href="#pipeline" data-fr="Vision" data-en="Vision">Vision</a>
+        <a href="#contact" data-fr="Contact" data-en="Contact">Contact</a>
+      </div>
+      <p class="footer-legal">© 2026 CLASSE+ · <span data-fr="Tous droits réservés" data-en="All rights reserved">Tous droits réservés</span></p>
+    </div>
+  </footer>
+
+  <script>
+    // NAV SCROLL
+    const nav = document.getElementById('nav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 60);
+    });
+
+    // SCROLL REVEAL
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+    }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // LANGUAGE TOGGLE
+    let currentLang = 'fr';
+    function setLang(lang) {
+      currentLang = lang;
+      document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
+      document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+      document.documentElement.lang = lang;
+      document.querySelectorAll('[data-fr][data-en]').forEach(el => {
+        el.textContent = el.getAttribute(`data-${lang}`);
+      });
+    }
+
+    // SMOOTH SCROLL
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        const target = document.querySelector(a.getAttribute('href'));
+        if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  </script>
+
+</body>
+</html>
