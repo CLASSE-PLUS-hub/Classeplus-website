@@ -463,6 +463,96 @@
       font-weight: 500;
     }
 
+    /* ─── WAITLIST BAR ─── */
+    .waitlist {
+      background: var(--ink);
+      padding: 4rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+    .waitlist::before {
+      content: '';
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse 50% 80% at 50% 50%, rgba(59, 91, 219, 0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .waitlist-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      position: relative;
+    }
+    .waitlist h3 {
+      font-family: var(--font-display);
+      font-size: 1.6rem;
+      color: white;
+      margin-bottom: 0.5rem;
+    }
+    .waitlist p {
+      color: rgba(255,255,255,0.55);
+      font-size: 0.95rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.5;
+    }
+    .waitlist-form {
+      display: flex;
+      gap: 0.75rem;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+    .waitlist-form input {
+      flex: 1;
+      padding: 0.85rem 1.2rem;
+      border: 1.5px solid rgba(255,255,255,0.15);
+      border-radius: 100px;
+      background: rgba(255,255,255,0.08);
+      color: white;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color .2s, background .2s;
+    }
+    .waitlist-form input::placeholder { color: rgba(255,255,255,0.35); }
+    .waitlist-form input:focus {
+      border-color: var(--accent-glow);
+      background: rgba(255,255,255,0.12);
+    }
+    .waitlist-form button {
+      padding: 0.85rem 1.8rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 0.92rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      white-space: nowrap;
+    }
+    .waitlist-form button:hover {
+      background: var(--accent-glow);
+      transform: translateY(-1px);
+    }
+    .waitlist-form button:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .waitlist-success {
+      display: none;
+      color: var(--green);
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 1rem;
+    }
+    .waitlist-success.show { display: block; }
+    .waitlist-count {
+      margin-top: 1.2rem;
+      font-size: 0.78rem;
+      color: rgba(255,255,255,0.35);
+    }
+
     /* ─── PIPELINE ─── */
     .pipeline { max-width: 900px; margin: 0 auto; }
     .pipeline-steps {
@@ -504,7 +594,7 @@
       margin: 0 auto;
     }
 
-    /* ─── CTA ─── */
+    /* ─── CTA / DEMO FORM ─── */
     .cta-section {
       text-align: center;
       padding: 8rem 2rem;
@@ -523,6 +613,116 @@
     .cta-section .section-desc {
       max-width: 480px;
       margin: 0 auto 2.5rem;
+    }
+    .demo-form {
+      max-width: 520px;
+      margin: 0 auto;
+      background: var(--white);
+      border: 1px solid rgba(0,0,0,0.08);
+      border-radius: var(--radius);
+      padding: 2.5rem;
+      text-align: left;
+      position: relative;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.06);
+    }
+    .demo-form h3 {
+      font-family: var(--font-display);
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+      text-align: center;
+    }
+    .demo-form > p {
+      text-align: center;
+      color: var(--ink-muted);
+      font-size: 0.88rem;
+      margin-bottom: 1.5rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+    .form-field {
+      margin-bottom: 0.75rem;
+    }
+    .form-field label {
+      display: block;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--ink-light);
+      margin-bottom: 0.35rem;
+    }
+    .form-field input,
+    .form-field select,
+    .form-field textarea {
+      width: 100%;
+      padding: 0.7rem 1rem;
+      border: 1.5px solid rgba(0,0,0,0.1);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-body);
+      font-size: 0.9rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color .2s;
+      background: var(--surface);
+    }
+    .form-field input:focus,
+    .form-field select:focus,
+    .form-field textarea:focus {
+      border-color: var(--accent);
+    }
+    .form-field textarea {
+      min-height: 80px;
+      resize: vertical;
+    }
+    .form-row .form-field { margin-bottom: 0; }
+    .demo-submit {
+      width: 100%;
+      padding: 0.85rem;
+      margin-top: 0.5rem;
+      background: var(--accent);
+      color: white;
+      border: none;
+      border-radius: 100px;
+      font-family: var(--font-body);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background .2s, transform .15s;
+      box-shadow: 0 4px 20px rgba(59, 91, 219, 0.25);
+    }
+    .demo-submit:hover {
+      background: var(--accent-deep);
+      transform: translateY(-1px);
+    }
+    .demo-submit:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .demo-success {
+      display: none;
+      text-align: center;
+      padding: 2rem 1rem;
+    }
+    .demo-success.show { display: block; }
+    .demo-success .check {
+      width: 64px; height: 64px;
+      background: var(--green-bg);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem;
+      margin: 0 auto 1rem;
+    }
+    .demo-success h4 {
+      font-family: var(--font-display);
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .demo-success p {
+      color: var(--ink-muted);
+      font-size: 0.9rem;
     }
 
     /* ─── FOOTER ─── */
@@ -590,6 +790,9 @@
       .role-grid { grid-template-columns: 1fr 1fr; }
       section { padding: 4rem 1.5rem; }
       .hero { padding: 6rem 1.5rem 3rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .waitlist-form { flex-direction: column; }
+      .demo-form { padding: 1.5rem; }
     }
 
     @media (max-width: 480px) {
@@ -611,7 +814,7 @@
         <button id="btn-fr" class="active" onclick="setLang('fr')">FR</button>
         <button id="btn-en" onclick="setLang('en')">EN</button>
       </div>
-      <a href="#contact" class="nav-cta" data-fr="Nous contacter" data-en="Contact Us">Nous contacter</a>
+      <a href="#contact" class="nav-cta" data-fr="Demander une démo" data-en="Request a Demo">Demander une démo</a>
     </div>
   </nav>
 
@@ -621,9 +824,9 @@
       <span data-fr="Conçu au Québec pour le Québec" data-en="Built in Québec, for Québec">Conçu au Québec pour le Québec</span>
     </div>
     <h1>
-  <span data-fr="Primaire · secondaire," data-en="Primary · secondary,">Primaire · secondaire,</span><br/>
-  <em data-fr="réinventée." data-en="reimagined.">réinventée.</em>
-</h1>
+      <span data-fr="Primaire · secondaire," data-en="Primary · secondary,">Primaire · secondaire,</span><br/>
+      <em data-fr="réinventée." data-en="reimagined.">réinventée.</em>
+    </h1>
     <p class="hero-sub" data-fr="CLASSE+ remplace Mozaïk, Google Classroom, les courriels et les fichiers Excel par une seule plateforme bilingue en temps réel — conforme à la Loi 25, hébergée à Montréal." data-en="CLASSE+ replaces Mozaïk, Google Classroom, emails, and Excel files with a single bilingual, real-time platform — Loi 25 compliant, hosted in Montréal.">
       CLASSE+ remplace Mozaïk, Google Classroom, les courriels et les fichiers Excel par une seule plateforme bilingue en temps réel — conforme à la Loi 25, hébergée à Montréal.
     </p>
@@ -784,6 +987,31 @@
     </div>
   </section>
 
+  <!-- WAITLIST -->
+  <section class="waitlist reveal" id="waitlist">
+    <div class="waitlist-inner">
+      <h3 data-fr="🚀 Soyez les premiers informés" data-en="🚀 Be the first to know">🚀 Soyez les premiers informés</h3>
+      <p data-fr="Inscrivez votre courriel pour être notifié dès le lancement officiel de CLASSE+." data-en="Enter your email to get notified when CLASSE+ officially launches.">Inscrivez votre courriel pour être notifié dès le lancement officiel de CLASSE+.</p>
+      <div class="waitlist-form" id="waitlist-form">
+        <input
+          type="email"
+          id="waitlist-email"
+          required
+          data-placeholder-fr="votre@courriel.ca"
+          data-placeholder-en="your@email.ca"
+          placeholder="votre@courriel.ca"
+        />
+        <button type="button" id="waitlist-btn" onclick="submitWaitlist()">
+          <span data-fr="M'inscrire" data-en="Sign Up">M'inscrire</span>
+        </button>
+      </div>
+      <div class="waitlist-success" id="waitlist-success">
+        <span data-fr="✅ Merci ! Vous serez notifié dès le lancement." data-en="✅ Thanks! You'll be notified at launch.">✅ Merci ! Vous serez notifié dès le lancement.</span>
+      </div>
+      <div class="waitlist-count" data-fr="🔒 Aucun spam. Désinscription en un clic." data-en="🔒 No spam. Unsubscribe in one click.">🔒 Aucun spam. Désinscription en un clic.</div>
+    </div>
+  </section>
+
   <!-- PIPELINE -->
   <section id="pipeline">
     <div class="pipeline">
@@ -810,19 +1038,63 @@
     </div>
   </section>
 
-  <!-- CTA -->
+  <!-- CTA / DEMO FORM -->
   <section class="cta-section" id="contact">
     <div class="section-label reveal" data-fr="Passez à l'action" data-en="Take Action">Passez à l'action</div>
     <h2 class="section-title reveal" data-fr="Prêt à simplifier votre école ?" data-en="Ready to simplify your school?">Prêt à simplifier votre école ?</h2>
     <p class="section-desc reveal" data-fr="Demandez une démonstration gratuite. Nous pouvons déployer dans votre commission scolaire en quelques semaines." data-en="Request a free demo. We can deploy to your school board in a few weeks.">Demandez une démonstration gratuite. Nous pouvons déployer dans votre commission scolaire en quelques semaines.</p>
-    <div class="hero-actions reveal" style="justify-content: center;">
-      <a href="mailto:info@classeplus.ca" class="btn-primary">
-        <span data-fr="Demander une démo" data-en="Request a Demo">Demander une démo</span>
-        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 9h8m-3-3 3 3-3 3"/></svg>
-      </a>
-      <a href="mailto:info@classeplus.ca" class="btn-secondary">
-        <span>info@classeplus.ca</span>
-      </a>
+
+    <div class="demo-form reveal" id="demo-form-card">
+      <!-- Form -->
+      <div id="demo-fields">
+        <h3 data-fr="📬 Demander une démo" data-en="📬 Request a Demo">📬 Demander une démo</h3>
+        <p data-fr="Remplissez le formulaire et nous vous contacterons sous 24h." data-en="Fill out the form and we'll get back to you within 24h.">Remplissez le formulaire et nous vous contacterons sous 24h.</p>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label data-fr="Nom complet *" data-en="Full Name *">Nom complet *</label>
+            <input type="text" id="demo-name" required data-placeholder-fr="Marie Tremblay" data-placeholder-en="Marie Tremblay" placeholder="Marie Tremblay" />
+          </div>
+          <div class="form-field">
+            <label data-fr="Courriel *" data-en="Email *">Courriel *</label>
+            <input type="email" id="demo-email" required data-placeholder-fr="marie@cssdm.gouv.qc.ca" data-placeholder-en="marie@cssdm.gouv.qc.ca" placeholder="marie@cssdm.gouv.qc.ca" />
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="form-field">
+            <label data-fr="Organisation" data-en="Organization">Organisation</label>
+            <input type="text" id="demo-org" data-placeholder-fr="CSSDM, École Saint-Laurent..." data-placeholder-en="CSSDM, École Saint-Laurent..." placeholder="CSSDM, École Saint-Laurent..." />
+          </div>
+          <div class="form-field">
+            <label data-fr="Votre rôle" data-en="Your Role">Votre rôle</label>
+            <select id="demo-role">
+              <option value="" data-fr="Sélectionner..." data-en="Select...">Sélectionner...</option>
+              <option value="directeur" data-fr="Direction d'école" data-en="School Administration">Direction d'école</option>
+              <option value="css" data-fr="Commission scolaire" data-en="School Board">Commission scolaire</option>
+              <option value="enseignant" data-fr="Enseignant" data-en="Teacher">Enseignant</option>
+              <option value="ti" data-fr="TI / Technologie" data-en="IT / Technology">TI / Technologie</option>
+              <option value="autre" data-fr="Autre" data-en="Other">Autre</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-field">
+          <label data-fr="Message (optionnel)" data-en="Message (optional)">Message (optionnel)</label>
+          <textarea id="demo-message" data-placeholder-fr="Dites-nous en plus sur vos besoins..." data-placeholder-en="Tell us more about your needs..." placeholder="Dites-nous en plus sur vos besoins..."></textarea>
+        </div>
+
+        <button class="demo-submit" id="demo-btn" type="button" onclick="submitDemo()">
+          <span data-fr="Envoyer la demande" data-en="Submit Request">Envoyer la demande</span>
+        </button>
+      </div>
+
+      <!-- Success state -->
+      <div class="demo-success" id="demo-success">
+        <div class="check">✅</div>
+        <h4 data-fr="Demande envoyée !" data-en="Request Sent!">Demande envoyée !</h4>
+        <p data-fr="Merci ! Notre équipe vous contactera sous 24 heures." data-en="Thanks! Our team will contact you within 24 hours.">Merci ! Notre équipe vous contactera sous 24 heures.</p>
+      </div>
     </div>
   </section>
 
@@ -847,38 +1119,132 @@
     </div>
   </footer>
 
+  <!-- ═══ SUPABASE CLIENT ═══ -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+
   <script>
-    // NAV SCROLL
+    // ─── SUPABASE INIT ───
+    // TODO: Replace with your actual Supabase URL and anon key
+    const SUPABASE_URL = 'https://qsjeoknspkzrlygjxmpm.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBxcGltZWRuaGNvamNzcWJqaW5rIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjkyMDkwMTksImV4cCI6MjA4NDc4NTAxOX0.xsZvD73f5rixJe9EuQsaMIfK3SqzQNazBrSu19gXAQA';
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ─── NAV SCROLL ───
     const nav = document.getElementById('nav');
     window.addEventListener('scroll', () => {
       nav.classList.toggle('scrolled', window.scrollY > 60);
     });
 
-    // SCROLL REVEAL
+    // ─── SCROLL REVEAL ───
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
     }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-    // LANGUAGE TOGGLE
+    // ─── LANGUAGE TOGGLE ───
     let currentLang = 'fr';
     function setLang(lang) {
       currentLang = lang;
       document.getElementById('btn-fr').classList.toggle('active', lang === 'fr');
       document.getElementById('btn-en').classList.toggle('active', lang === 'en');
       document.documentElement.lang = lang;
+      // Text content
       document.querySelectorAll('[data-fr][data-en]').forEach(el => {
         el.textContent = el.getAttribute(`data-${lang}`);
       });
+      // Placeholders
+      document.querySelectorAll(`[data-placeholder-${lang}]`).forEach(el => {
+        el.placeholder = el.getAttribute(`data-placeholder-${lang}`);
+      });
     }
 
-    // SMOOTH SCROLL
+    // ─── SMOOTH SCROLL ───
     document.querySelectorAll('a[href^="#"]').forEach(a => {
       a.addEventListener('click', e => {
         e.preventDefault();
         const target = document.querySelector(a.getAttribute('href'));
         if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
+    });
+
+    // ─── WAITLIST SUBMIT ───
+    async function submitWaitlist() {
+      const emailInput = document.getElementById('waitlist-email');
+      const btn = document.getElementById('waitlist-btn');
+      const email = emailInput.value.trim();
+
+      if (!email || !email.includes('@')) {
+        emailInput.style.borderColor = '#c92a2a';
+        setTimeout(() => { emailInput.style.borderColor = ''; }, 2000);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = '...';
+
+      try {
+        const { error } = await sb.from('waitlist_signups').insert({ email });
+        if (error && error.code === '23505') {
+          // Duplicate — already signed up, still show success
+        } else if (error) {
+          throw error;
+        }
+        document.getElementById('waitlist-form').style.display = 'none';
+        document.getElementById('waitlist-success').classList.add('show');
+      } catch (err) {
+        console.error('Waitlist error:', err);
+        btn.disabled = false;
+        btn.textContent = currentLang === 'fr' ? "M'inscrire" : 'Sign Up';
+        alert(currentLang === 'fr' ? 'Erreur. Veuillez réessayer.' : 'Error. Please try again.');
+      }
+    }
+
+    // ─── DEMO REQUEST SUBMIT ───
+    async function submitDemo() {
+      const name = document.getElementById('demo-name').value.trim();
+      const email = document.getElementById('demo-email').value.trim();
+      const org = document.getElementById('demo-org').value.trim();
+      const role = document.getElementById('demo-role').value;
+      const message = document.getElementById('demo-message').value.trim();
+      const btn = document.getElementById('demo-btn');
+
+      if (!name || !email || !email.includes('@')) {
+        if (!name) document.getElementById('demo-name').style.borderColor = '#c92a2a';
+        if (!email || !email.includes('@')) document.getElementById('demo-email').style.borderColor = '#c92a2a';
+        setTimeout(() => {
+          document.getElementById('demo-name').style.borderColor = '';
+          document.getElementById('demo-email').style.borderColor = '';
+        }, 2000);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.textContent = currentLang === 'fr' ? 'Envoi...' : 'Sending...';
+
+      try {
+        const { error } = await sb.from('demo_requests').insert({
+          full_name: name,
+          email,
+          organization: org || null,
+          role: role || null,
+          message: message || null,
+        });
+
+        if (error) throw error;
+
+        document.getElementById('demo-fields').style.display = 'none';
+        document.getElementById('demo-success').classList.add('show');
+      } catch (err) {
+        console.error('Demo request error:', err);
+        btn.disabled = false;
+        btn.textContent = currentLang === 'fr' ? 'Envoyer la demande' : 'Submit Request';
+        alert(currentLang === 'fr' ? 'Erreur. Veuillez réessayer.' : 'Error. Please try again.');
+      }
+    }
+
+    // Allow Enter key on waitlist input
+    document.getElementById('waitlist-email').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') submitWaitlist();
     });
   </script>
 
